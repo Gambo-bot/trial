@@ -1,0 +1,12 @@
+[
+  {
+    "username": "admin",
+    "full_name": "Chief Administrator",
+    "password_hash": "$2b$12$g.b/a9/YS5p.aH3VAUJOhOjT7U3HOaKRUks1YWirAWOfzzRdkYooi"
+  },
+  {
+    "username": "admin2",
+    "full_name": "Deputy Administrator",
+    "password_hash": "$2b$12$XbXzTMUZ.YKtBHivQsiWXeb6Bmod8AMFaHO9IXhBh9Hv6Kh30oE6q"
+  }
+]

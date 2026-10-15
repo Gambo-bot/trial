@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NPP Constituency Register</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="v-login" class="auth" hidden>
+ <div class="tri"></div><h1>NPP Constituency Register</h1><p class="sub">Authorised users only</p>
+ <div class="card">
+  <form id="lf" autocomplete="off">
+   <h3>Sign in</h3>
+   <div><label>Username</label><input id="lu" required autocomplete="username"></div>
+   <div><label>Password</label><input id="lp" type="password" required autocomplete="current-password"></div>
+   <p class="err" id="lerr"></p>
+   <button type="submit" style="width:100%">Sign in</button>
+   <p class="note" style="text-align:center;margin:12px 0 0"><a href="#" id="toReg">New staff? Request access</a></p>
+  </form>
+  <form id="rf" autocomplete="off" hidden>
+   <h3>Request staff access</h3>
+   <div><label>Full name</label><input id="rn" required></div>
+   <div><label>Username</label><input id="ru" required></div>
+   <div><label>Password (minimum 10 characters)</label><input id="rp" type="password" required autocomplete="new-password"></div>
+   <div><label>Confirm password</label><input id="rc" type="password" required autocomplete="new-password"></div>
+   <p class="err" id="rerr"></p>
+   <button type="submit" style="width:100%">Submit request</button>
+   <p class="note" style="text-align:center;margin:12px 0 0">An administrator must approve your request before you can sign in.</p>
+   <p class="note" style="text-align:center;margin:6px 0 0"><a href="#" id="toLog">Back to sign in</a></p>
+  </form>
+ </div>
+</div>
+
+<div id="v-force" class="auth" hidden>
+ <div class="tri"></div><h1>Change password</h1><p class="sub" id="forceMsg"></p>
+ <div class="card"><form id="cf" autocomplete="off">
+  <div><label>Current password</label><input id="cc" type="password" required autocomplete="current-password"></div>
+  <div><label>New password (minimum 10 characters)</label><input id="cn" type="password" required autocomplete="new-password"></div>
+  <div><label>Confirm new password</label><input id="cn2" type="password" required autocomplete="new-password"></div>
+  <p class="err" id="cerr"></p>
+  <button type="submit" style="width:100%">Change password</button>
+  <p class="note" style="text-align:center;margin:12px 0 0" id="cCancelWrap"><a href="#" id="cCancel">Cancel</a></p>
+ </form></div>
+</div>
+
+<div id="v-app" hidden>
+<header>
+ <div class="hd">
+  <div><h1>NPP Constituency Comprehensive Register</h1><p>Voter records · Electoral areas · Polling stations · Contacts</p></div>
+  <div class="me"><span id="who"></span><button class="s" id="bPw">Change password</button><button class="s" id="bOut">Sign out</button></div>
+ </div>
+ <nav>
+  <button data-tab="records" class="on">Records</button>
+  <button data-tab="users" class="adm">Users &amp; approvals <span id="pendCount"></span></button>
+  <button data-tab="audit" class="adm">Audit log</button>
+ </nav>
+</header>
+<main>
+
+<section id="t-records">
+ <div class="card adm" id="pendBanner" hidden><b id="pendMsg"></b> <a href="#" id="pendGo">Review requests</a></div>
+ <div class="stats">
+  <div class="stat"><b id="sT">0</b><span>Records</span></div>
+  <div class="stat"><b id="sAc">0</b><span>Active</span></div>
+  <div class="stat"><b id="sA">0</b><span>Electoral areas</span></div>
+  <div class="stat"><b id="sP">0</b><span>Polling stations</span></div>
+  <div class="stat"><b id="sM">0</b><span>Male / <span id="sF">0</span> Female</span></div>
+ </div>
+
+ <div class="card" style="margin-top:14px">
+  <form id="rec" class="g">
+   <input type="hidden" name="id">
+   <h3 id="recTitle">Add a record</h3>
+   <div><label>Full name *</label><input name="name" required maxlength="120"></div>
+   <div><label>Voter ID number</label><input name="voter_id" maxlength="40"></div>
+   <div><label>Gender</label><select name="gender"><option value="">—</option><option>Male</option><option>Female</option></select></div>
+   <div><label>Date of birth</label><input name="dob" type="date"></div>
+   <div><label>Occupation</label><input name="occupation" maxlength="80"></div>
+   <h3>Electoral details</h3>
+   <div><label>Electoral area *</label><input name="area" list="dlAreas" required maxlength="100"></div>
+   <div><label>Polling station name *</label><input name="polling_station" list="dlPs" required maxlength="120"></div>
+   <div><label>Polling station code</label><input name="ps_code" maxlength="30"></div>
+   <div><label>Registration date</label><input name="reg_date" type="date"></div>
+   <div><label>Status</label><select name="status"><option>Active</option><option>Relocated</option><option>Deceased</option><option>Inactive</option></select></div>
+   <h3>Contact</h3>
+   <div><label>Phone *</label><input name="phone" type="tel" required maxlength="20"></div>
+   <div><label>Alternative phone</label><input name="phone2" type="tel" maxlength="20"></div>
+   <div><label>Email</label><input name="email" type="email" maxlength="120"></div>
+   <div class="wide"><label>Residential address / landmark</label><input name="address" maxlength="200"></div>
+   <div class="wide"><label>Notes</label><textarea name="notes" rows="2" maxlength="1000"></textarea></div>
+   <div class="wide"><p class="err" id="recErr"></p><div style="display:flex;gap:8px"><button type="submit" id="recSave">Add record</button><button type="button" class="s" id="recClear">Clear</button></div></div>
+  </form>
+  <datalist id="dlAreas"></datalist><datalist id="dlPs"></datalist>
+ </div>
+
+ <div class="card">
+  <div class="bar">
+   <input id="f_q" placeholder="Search name, voter ID, phone, email, address…">
+   <select id="f_area"><option value="">All electoral areas</option></select>
+   <select id="f_polling_station"><option value="">All polling stations</option></select>
+   <select id="f_status"><option value="">All statuses</option><option>Active</option><option>Relocated</option><option>Deceased</option><option>Inactive</option></select>
+   <select id="f_gender"><option value="">All genders</option><option>Male</option><option>Female</option></select>
+   <select id="f_created_by" class="adm"><option value="">Added by: anyone</option></select>
+   <button class="s" id="bExp">Export CSV</button>
+   <button class="s adm" id="bImp">Import CSV</button>
+   <input type="file" id="file" accept=".csv" hidden>
+  </div>
+  <div class="tw"><table><thead><tr><th>#</th><th>Full name</th><th>Voter ID</th><th>Electoral area</th><th>Polling station</th><th>Contact</th><th>Status</th><th class="adm">Added by</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+  <div id="emptyMsg" class="empty" hidden>No records found.</div>
+  <div class="pager"><span class="note" id="cnt"></span><button class="s" id="pPrev">‹ Prev</button><button class="s" id="pNext">Next ›</button></div>
+  <p class="note">Staff see only the records they added. Handle personal data in line with Ghana's Data Protection Act, 2012 (Act 843).</p>
+ </div>
+</section>
+
+<section id="t-users" hidden>
+ <div class="card" id="pendBox" hidden>
+  <h3 style="margin:0 0 10px">Pending staff approvals</h3>
+  <div class="tw"><table style="min-width:480px"><thead><tr><th>Full name</th><th>Username</th><th>Requested</th><th></th></tr></thead><tbody id="pb"></tbody></table></div>
+ </div>
+ <div class="card">
+  <h3 style="margin:0 0 10px">Create an account</h3>
+  <form id="uf" class="g">
+   <div><label>Username</label><input name="username" required></div>
+   <div><label>Full name</label><input name="full_name" required></div>
+   <div><label>Temporary password (min 10)</label><input name="password" type="password" required autocomplete="new-password"></div>
+   <div><label>Role</label><select name="role"><option value="staff">Staff</option><option value="admin">Administrator</option></select></div>
+   <div><button type="submit">Create</button></div>
+   <p class="err wide" id="uErr"></p>
+  </form>
+  <p class="note">New and reset accounts must choose their own password at first sign-in.</p>
+ </div>
+ <div class="card">
+  <h3 style="margin:0 0 10px">All accounts</h3>
+  <div class="tw"><table style="min-width:640px"><thead><tr><th>Username</th><th>Full name</th><th>Role</th><th>Status</th><th>Approved by</th><th></th></tr></thead><tbody id="ub"></tbody></table></div>
+ </div>
+</section>
+
+<section id="t-audit" hidden>
+ <div class="card">
+  <div class="tw"><table style="min-width:760px"><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Target</th><th>Detail</th><th>IP</th></tr></thead><tbody id="ab"></tbody></table></div>
+  <div class="pager"><span class="note" id="aCnt"></span><button class="s" id="aPrev">‹ Newer</button><button class="s" id="aNext">Older ›</button></div>
+ </div>
+</section>
+
+</main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
